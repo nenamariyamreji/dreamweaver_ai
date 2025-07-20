@@ -1,2 +1,5 @@
-streamlit
-openai
+flask
+requests
+flask-cors
+google-genai
+python-dotenv

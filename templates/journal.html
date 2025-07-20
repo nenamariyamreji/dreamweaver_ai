@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dream Journal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <h1 class="text-4xl mb-4 font-bold">Dream Journal</h1>
+
+  <!-- Dream Input -->
+  <textarea 
+    id="dreamInput" 
+    rows="4" 
+    class="w-full p-4 text-black rounded mb-4" 
+    placeholder="Write your dream..."></textarea>
+
+  <!-- Mood Selection -->
+  <select id="moodSelect" class="w-full p-4 text-black rounded mb-4">
+    <option value="">Select mood</option>
+    <option value="happy">Happy</option>
+    <option value="sad">Sad</option>
+    <option value="peaceful">Peaceful</option>
+    <option value="excited">Excited</option>
+    <option value="confused">Confused</option>
+  </select>
+
+  <!-- Save Button -->
+  <button id="saveBtn" class="bg-purple-700 px-6 py-3 rounded">Save</button>
+
+  <!-- Entries -->
+  <h2 class="text-2xl mt-8 mb-4">Your Entries</h2>
+  <div id="entries">
+    {% for entry in entries %}
+      <div class="bg-white bg-opacity-10 p-4 mb-2 rounded">
+        <p class="text-xs text-gray-400">{{ entry.timestamp }}</p>
+        <p class="mb-2">{{ entry.text }}</p>
+        {% if entry.mood %}
+          <p class="text-sm italic text-gray-300">Mood: {{ entry.mood }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    document.getElementById("saveBtn").onclick = async () => {
+      const text = document.getElementById("dreamInput").value.trim();
+      const mood = document.getElementById("moodSelect").value;
+
+      if (!text) {
+        alert("Please write something!");
+        return;
+      }
+
+      if (!mood) {
+        alert("Please select a mood!");
+        return;
+      }
+
+      const res = await fetch("/save_journal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dream: text, mood: mood })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.error || "Something went wrong!");
+      }
+    };
+  </script>
+</body>
+</html>

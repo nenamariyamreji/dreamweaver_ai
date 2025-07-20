@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DreamWeaver AI | Comic Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-black text-white min-h-screen flex flex-col items-center justify-center p-6">
+  <h1 class="text-4xl mb-6 font-bold">DreamWeaver AI - Comic Generator</h1>
+  <p class="mb-4">Enter your dream idea to create a comic script:</p>
+  <input id="comicInput" class="text-black p-2 rounded w-full max-w-md mb-4" placeholder="E.g. A cat exploring a futuristic city" />
+  <button id="generateComicBtn" class="bg-purple-700 px-6 py-3 rounded hover:bg-purple-800 transition mb-4">Generate Comic</button>
+
+  <div id="loading" class="mt-4 hidden">Drawing your comic story...</div>
+  <div id="comicResult" class="mt-6 max-w-3xl whitespace-pre-line"></div>
+
+  <script>
+    const btn = document.getElementById("generateComicBtn");
+    const input = document.getElementById("comicInput");
+    const result = document.getElementById("comicResult");
+    const loading = document.getElementById("loading");
+
+    btn.addEventListener("click", async () => {
+      const prompt = input.value.trim();
+      if (!prompt) {
+        alert("Please enter a dream idea!");
+        return;
+      }
+
+      loading.classList.remove("hidden");
+      result.innerHTML = "";
+
+      try {
+        const res = await fetch("/generate_comic", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        if (data.comic) {
+          result.textContent = data.comic;
+        } else {
+          result.innerHTML = `<p class="text-red-400">Error: ${data.error}</p>`;
+        }
+      } catch (err) {
+        result.innerHTML = `<p class="text-red-400">Error: ${err.message}</p>`;
+      } finally {
+        loading.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

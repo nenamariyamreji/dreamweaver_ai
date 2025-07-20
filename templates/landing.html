@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamWeaverAI | Welcome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+    }
+    h1 {
+      letter-spacing: 0.1em;
+    }
+    .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+    .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite ease-in-out; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center text-center px-6">
+  <div class="stars" id="stars"></div>
+  <h1 class="text-6xl md:text-7xl font-extrabold mb-4">DreamWeaverAI</h1>
+  <p class="text-xl mb-8 text-gray-200">Where your dreams become your reality</p>
+  <div class="flex gap-6">
+    <a href="/app" class="bg-purple-600 px-8 py-4 rounded-full text-white font-semibold shadow hover:bg-purple-700 transition">Start Dreaming</a>
+    <a href="/journal" class="border border-white px-8 py-4 rounded-full text-white font-semibold hover:bg-white hover:text-purple-700 transition">Dream Journal</a>
+  </div>
+
+  <script>
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        const size = `${Math.random() * 2 + 1}px`;
+        star.style.width = size;
+        star.style.height = size;
+        star.style.setProperty('--duration', `${Math.random() * 5 + 3}s`);
+        star.style.opacity = `${Math.random() * 0.8 + 0.2}`;
+        starsContainer.appendChild(star);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', createStars);
+  </script>
+</body>
+</html>
